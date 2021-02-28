@@ -1,24 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Card, Media, CardImg, CardImgOverlay, CardText, CardBody, CardTitle, ListGroup, ListGroupItem } from 'reactstrap';
 
 
-class Dishdetail extends Component{
-    constructor(props){
-        super(props);
-        this.state={
-        }
-    }
-
-
-    componentDidMount(){
-        console.log('Dishdetail Component didMount is invoked');
-    }
-
-    componentDidUpdate(){
-        console.log('Dishdetail Component didUpdate is invoked');
-    }
-
-    renderDish(dish){
+    function RenderDish({dish}){
         if(dish!=null){
             return(
                 <div>
@@ -39,7 +23,7 @@ class Dishdetail extends Component{
         }
     }
 
-    renderComments(dish){
+    function RenderComments({dish}){
         if(dish!=null){
             const comments=dish.comments.map((c)=>{
                 let date= new Date(c.date).toDateString();
@@ -66,25 +50,22 @@ class Dishdetail extends Component{
             )
         }
     }
-    render(){
-        console.log('Dishdetail Component render is invoked');
-        const dish= this.props.dish;
+    const Dishdetail=(props)=>{
+        const dish= props.dish;
 
         return(
             <div className="container">
                 <div className="row">
                     <div className="col-12 col-md-5 m-1">
-                    {this.renderDish(dish)}
-                </div>
-                <div className="col-12 col-md-5 m-1">
-                    {this.renderComments(dish)}
-                </div>
+                        <RenderDish dish={props.dish} />
+                    </div>
+                    <div className="col-12 col-md-5 m-1">
+                        <RenderComments dish={props.dish} />
+                    </div>
                 </div>
             </div>
         )
     }
-}
-
 export default Dishdetail;
 
 
