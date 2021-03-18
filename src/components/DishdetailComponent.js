@@ -22,8 +22,8 @@ import { Control, Errors, LocalForm } from 'react-redux-form';
 
         handleSubmit(values){
             this.toggleModal();
-            console.log("Current State is: "+ JSON.stringify(values));
-            // alert("Current State is: "+ JSON.stringify(values));
+            console.log(values,this.props);
+            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
         }
         toggleModal(){
             this.setState({
@@ -38,7 +38,7 @@ import { Control, Errors, LocalForm } from 'react-redux-form';
                         <ModalBody>
                             <LocalForm onSubmit={(values)=>this.handleSubmit(values)}>
                                 <Row className="form-group">
-                                    <Label htmlFor=".rating" md={2}>First Name</Label>
+                                    <Label htmlFor=".rating" md={2}>Rating</Label>
                                     <Col md={{size:3, offset:1}}>
                                         <Control.select model=".rating" name="rating"
                                         className="form-control" >
@@ -51,9 +51,9 @@ import { Control, Errors, LocalForm } from 'react-redux-form';
                                     </Col>
                                 </Row>
                                 <Row className="form-group">
-                                    <Label htmlFor=".name" md={2}>Name</Label>
+                                    <Label htmlFor=".name" md={2}>Author</Label>
                                     <Col md={5}>
-                                        <Control.text model=".name" name="name"
+                                        <Control.text model=".author" name="author"
                                         className="form-control" placeholder="Your Name"
                                         validators={{
                                             required,
@@ -62,7 +62,7 @@ import { Control, Errors, LocalForm } from 'react-redux-form';
                                         }}/>   
                                     <Errors 
                                         className="text-danger"
-                                        model=".name"
+                                        model=".author"
                                         show="touched"
                                         messages={{
                                             required: 'Required',
@@ -73,9 +73,9 @@ import { Control, Errors, LocalForm } from 'react-redux-form';
                                     </Col>
                                 </Row>
                                 <Row className="form-group">
-                                    <Label htmlFor=".message" md={2}>Comment</Label>
+                                    <Label htmlFor=".comment" md={2}>Comment</Label>
                                     <Col md={10}>
-                                        <Control.textarea model=".message" id="message" name="message" 
+                                        <Control.textarea model=".comment" id="comment" name="comment" 
                                         rows="6"  className="form-control"/>
                                     </Col>
                                 </Row>
@@ -118,7 +118,7 @@ import { Control, Errors, LocalForm } from 'react-redux-form';
         }
     }
 
-    function RenderComments({comments}){
+    function RenderComments({comments, addComment, dishId}){
         if(comments!=null){
             const comment=comments.map((c)=>{
                 let date= new Date(c.date).toDateString();
@@ -138,7 +138,7 @@ import { Control, Errors, LocalForm } from 'react-redux-form';
                 <div>
                     <h4>Comments</h4>
                     {comment}
-                    <CommentForm/>
+                    <CommentForm dishId={dishId} addComment={addComment} />
                 </div>
             )
         }
@@ -169,7 +169,10 @@ import { Control, Errors, LocalForm } from 'react-redux-form';
                         <RenderDish dish={props.dish} />
                     </div>
                     <div className="col-12 col-md-5 m-1">
-                        <RenderComments comments={props.comments} />
+                    <RenderComments comments={props.comments}
+                        addComment={props.addComment}
+                        dishId={props.dish.id}
+                    />
                     </div>
                 </div>
             </div>
