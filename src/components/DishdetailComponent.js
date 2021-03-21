@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Media, CardImg, Breadcrumb, CardText, CardBody, CardTitle, 
+import { Card, CardImg, Breadcrumb, CardText, CardBody, CardTitle, 
      BreadcrumbItem, Button, Modal, ModalHeader, ModalBody, Row, Label, Col} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, Errors, LocalForm } from 'react-redux-form';
@@ -24,7 +24,7 @@ import { baseUrl } from '../shared/baseUrl';
         handleSubmit(values){
             this.toggleModal();
             console.log(values,this.props);
-            this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+            this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
         }
         toggleModal(){
             this.setState({
@@ -42,7 +42,7 @@ import { baseUrl } from '../shared/baseUrl';
                                     <Label htmlFor=".rating" md={2}>Rating</Label>
                                     <Col md={{size:3, offset:1}}>
                                         <Control.select model=".rating" name="rating"
-                                        className="form-control" >
+                                            className="form-control" >
                                             <option>1</option>
                                             <option>2</option>
                                             <option>3</option>
@@ -119,7 +119,7 @@ import { baseUrl } from '../shared/baseUrl';
         }
     }
 
-    function RenderComments({comments, addComment, dishId}){
+    function RenderComments({comments, postComment, dishId}){
         if(comments!=null){
             const comment=comments.map((c)=>{
                 let date= new Date(c.date).toDateString();
@@ -139,7 +139,7 @@ import { baseUrl } from '../shared/baseUrl';
                 <div>
                     <h4>Comments</h4>
                     {comment}
-                    <CommentForm dishId={dishId} addComment={addComment} />
+                    <CommentForm dishId={dishId} postComment={postComment} />
                 </div>
             )
         }
@@ -170,7 +170,6 @@ import { baseUrl } from '../shared/baseUrl';
         }
         else if(props.dish!=null){
             console.log(props.comments)
-        const dish= props.dish;
 
         return(
             <div className="container">
@@ -190,7 +189,7 @@ import { baseUrl } from '../shared/baseUrl';
                     </div>
                     <div className="col-12 col-md-5 m-1">
                     <RenderComments comments={props.comments}
-                        addComment={props.addComment}
+                        postComment={props.postComment}
                         dishId={props.dish.id}
                     />
                     </div>
